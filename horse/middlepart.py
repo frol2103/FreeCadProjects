@@ -176,24 +176,17 @@ class MiddlePart:
         c4  = c1 + Base.Vector(0,self.horseWidth,0)
         
         t12 = c1+ Base.Vector(self.seatTenonLength)        
-        t22 = c4+ Base.Vector(self.seatTenonLength)        
+        t42 = c4+ Base.Vector(self.seatTenonLength)        
+
+        t22 = c2- Base.Vector(self.seatTenonLength)        
+        t32 = c3- Base.Vector(self.seatTenonLength)        
+
         
         points += self.tenonPoints(c1,t12,Base.Vector(0,-1,0))
-        points.append(c2 + Base.Vector(-1*self.thickness,0,0))
-        points.append(c2 + Base.Vector(-1*self.thickness,-self.thickness,0))
-        if not toCut:
-            points.append(c2 + Base.Vector(-2.5*self.thickness,-self.thickness,0))
-            points.append(c2 + Base.Vector(-2.5*self.thickness,-self.thickness*2,0))
-            points.append(c2 + Base.Vector(0,-self.thickness*2,0))
-            points.append(c3 + Base.Vector(0,self.thickness*2,0))
-            points.append(c3 + Base.Vector(-2.5*self.thickness,self.thickness*2,0))
-            points.append(c3 + Base.Vector(-2.5*self.thickness,self.thickness,0))
-        else:
-            points.append(c2 + Base.Vector(+1.7*self.thickness,-self.thickness*2,0))
-            points.append(c3 + Base.Vector(+1.7*self.thickness,self.thickness*2,0))
-        points.append(c3 + Base.Vector(-1*self.thickness,self.thickness,0))
-        points.append(c3 + Base.Vector(-1*self.thickness,0,0))
-        points += self.tenonPoints(t22,c4,Base.Vector(0,1,0))
+        points += self.tenonPoints(t22,c2,Base.Vector(0,-1,0))
+        points += self.tenonPoints(c3,t32,Base.Vector(0,-1,0))
+        points += self.tenonPoints(t42,c2,Base.Vector(0,-1,0))
+
         part = util.partFromVectors(points, Base.Vector(0,0,self.thickness))
         part.translate(Base.Vector(0,self.thickness,0))
         return part
