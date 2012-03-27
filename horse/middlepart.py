@@ -44,7 +44,6 @@ class MiddlePart:
 
     def showAll(self,pnt=Base.Vector(0,0,0),dir=Base.Vector(0, 0, 1)):
         parts = []; 
-        util.clear();
         util.concat(parts,self.makeAll())
         doc=FreeCAD.activeDocument() 
         grp=doc.addObject("App::DocumentObjectGroup", "middle") 
@@ -235,7 +234,7 @@ class MiddlePart:
         
         attv1 = util.mult((c4 - c1),0.5,c1) - Base.Vector(0,-self.thickness * 3/2) 
         attv2 = util.mult((c4 - c1),0.5,c1) - Base.Vector(0,self.thickness * 3/2)
-        a = self.attachPart(attv1,attv2,Base.Vector(-1,0,0))
+        a = self.attachPart(attv1,attv2,Base.Vector(-1,0,0),toCut=toCut)
         part = p.fuse(a)
         part.translate(Base.Vector(0,self.thickness,0))
         return part 
