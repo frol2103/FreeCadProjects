@@ -5,8 +5,9 @@ print(sys.path)
 import partspattern
 import side
 import middlepart
-
+import util
 def hreload():
+    util.clear()
     reload(partspattern)
     reload(side)
     reload(middlepart)
