@@ -21,20 +21,19 @@ class MiddlePart:
     
     horseWidth          = 250
     
-    feetHolderLength    = 100
+    feetHolderLength    = 110
 
 
-    seatLength          = 210 + 25
+    seatLength          = 215
 
-    backCurveDepth      = 20
-    backLength          = 135
+    backCurveDepth      = 30
+    backLength          = 150
 
     alpha               = 70
     r_alpha             = math.radians(alpha)
 
-    seatBackBorder      = 30
     
-    legHolderLength     = 100
+    legHolderLength     = 110
     legSafeWidth        = 40
     legSafeHeight       = 90
     legSafeCurve1       = 20
@@ -68,12 +67,12 @@ class MiddlePart:
         tz = (math.sin(math.radians(90 - self.alpha)) + math.sin(self.r_alpha))*self.thickness
         fh.translate(Base.Vector(tx,0,tz))
         lh.rotate(Base.Vector(0,0,0), Base.Vector(0,1,0), -(self.alpha))
-        tx = math.cos(self.r_alpha)*self.legHolderLength  + (self.thickness * math.tan(math.pi/2 - self.r_alpha)) * math.cos(self.r_alpha)
-        tz= math.sin(self.r_alpha)*(self.legHolderLength) -self.thickness + (self.thickness * math.cos(self.r_alpha))
+        tx = math.cos(self.r_alpha)*self.legHolderLength  
+        tz= math.sin(self.r_alpha)*(self.legHolderLength) -self.thickness 
         s.translate(Base.Vector(tx,0,tz))
         b.rotate(Base.Vector(0,0,0), Base.Vector(0,1,0), -(70))
-        tz += self.thickness
-        tx += self.seatLength - self.seatBackBorder
+        tz += (1-math.cos(self.r_alpha))*self.thickness 
+        tx += self.seatLength +math.sin(self.r_alpha)*self.thickness
         b.translate(Base.Vector(tx,0,tz))
         
         util.concat(parts, fh)
