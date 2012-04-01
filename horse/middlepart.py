@@ -8,21 +8,23 @@ from line import Line
 class MiddlePart:
         
     thickness           = 12;
-    
+    sideThickness       = 15;
+    keyThickness        = 15;
+
+    tenonLength          = 3*keyThickness
+
     attachSize              = 50;
-    attachWidth             = 3 * thickness
+    attachWidth             = 3 * keyThickness
     attachCurveDepth        = 10
     attachHoleMarginStart   = 0;
     attachHoleMarginEnd     = 20;
     
-    horseWidth          = 270
+    horseWidth          = 250
     
     feetHolderLength    = 100
-    feetTenonLength     = 3*thickness
 
 
     seatLength          = 210 + 25
-    seatTenonLength     = 3*thickness
 
     backCurveDepth      = 20
     backLength          = 135
@@ -94,11 +96,11 @@ class MiddlePart:
         c3  = c2 + Base.Vector(0,self.horseWidth,0)
         c4  = c1 + Base.Vector(0,self.horseWidth,0)
         
-        tenonMargin = (self.feetHolderLength - self.feetTenonLength)/2
+        tenonMargin = (self.feetHolderLength - self.tenonLength)/2
         t11 = c1 + Base.Vector(tenonMargin,0,0)
-        t12 = t11+ Base.Vector(self.feetTenonLength)        
+        t12 = t11+ Base.Vector(self.tenonLength)        
         t21 = c4 + Base.Vector(tenonMargin,0,0)
-        t22 = t21+ Base.Vector(self.feetTenonLength)        
+        t22 = t21+ Base.Vector(self.tenonLength)        
         
         points.append(c1)
         points += self.tenonPoints(t11,t12,Base.Vector(0,-1,0))
@@ -108,7 +110,7 @@ class MiddlePart:
         points.append(c4)
 
         p = util.partFromVectors(points,Base.Vector(0,0,self.thickness))
-        p.translate(Base.Vector(0,self.thickness,0))
+        p.translate(Base.Vector(0,self.sideThickness,0))
         return p
     
     def legHolder(self,toCut=False):
@@ -118,7 +120,7 @@ class MiddlePart:
         c3  = c2 + Base.Vector(0,self.horseWidth,0)
         c4  = c1 + Base.Vector(0,self.horseWidth,0)
         
-        attachMargin = (self.legHolderLength- 3*self.thickness)/2
+        attachMargin = (self.legHolderLength- self.attachWidth)/2
         t11 = c1 + Base.Vector(attachMargin,0,0)
         t12 = t11+ Base.Vector(self.attachWidth)        
         t21 = c4 + Base.Vector(attachMargin,0,0)
@@ -165,7 +167,7 @@ class MiddlePart:
         a1 = self.attachPart(t11,t12,Base.Vector(0,-1,0),toCut=toCut)
         a2 = self.attachPart(t21,t22,Base.Vector(0,1,0),toCut=toCut)
         part = p.fuse(a1).fuse(a2)
-        part.translate(Base.Vector(0,self.thickness,0))
+        part.translate(Base.Vector(0,self.sideThickness,0))
         return part
 
     def seat(self,toCut=False):
@@ -175,10 +177,10 @@ class MiddlePart:
         c3  = c2 + Base.Vector(0,self.horseWidth,0)
         c4  = c1 + Base.Vector(0,self.horseWidth,0)
         
-        t12 = c1+ Base.Vector(self.seatTenonLength)        
-        t42 = c4+ Base.Vector(self.seatTenonLength)        
-        t22 = c2- Base.Vector(self.seatTenonLength)        
-        t32 = c3- Base.Vector(self.seatTenonLength)        
+        t12 = c1+ Base.Vector(self.tenonLength)        
+        t42 = c4+ Base.Vector(self.tenonLength)        
+        t22 = c2- Base.Vector(self.tenonLength)        
+        t32 = c3- Base.Vector(self.tenonLength)        
         
         points += self.tenonPoints(c1,t12,Base.Vector(0,-1,0))
         points += self.tenonPoints(t22,c2,Base.Vector(0,-1,0))
@@ -186,7 +188,7 @@ class MiddlePart:
         points += self.tenonPoints(t42,c4,Base.Vector(0,1,0))
 
         part = util.partFromVectors(points, Base.Vector(0,0,self.thickness))
-        part.translate(Base.Vector(0,self.thickness,0))
+        part.translate(Base.Vector(0,self.sideThickness,0))
         return part
         
     def back(self,toCut=False):
@@ -199,19 +201,18 @@ class MiddlePart:
         #arc in the top
         av1 = util.mult((c3 - c2),0.5,c2) + Base.Vector(self.backCurveDepth) 
         
-        c3c = c3 + Base.Vector(0,self.thickness,0)
-        c2c = c2 + Base.Vector(0,-self.thickness,0)
+        c3c = c3 + Base.Vector(0,self.sideThickness,0)
+        c2c = c2 + Base.Vector(0,-self.sideThickness,0)
 
-        topTenonLength = 3*self.thickness
         
         points.append(c3c)
-        points.append(c3 + Base.Vector(-topTenonLength,self.thickness,0))
-        points.append(c3 + Base.Vector(-topTenonLength,0,0))
+        points.append(c3 + Base.Vector(-self.tenonLength,self.sideThickness,0))
+        points.append(c3 + Base.Vector(-self.tenonLength,0,0))
         points.append(c4)
         
         points.append(c1)
-        points.append(c2 + Base.Vector(-topTenonLength,0,0))
-        points.append(c2 + Base.Vector(-topTenonLength,-self.thickness,0))
+        points.append(c2 + Base.Vector(-self.tenonLength,0,0))
+        points.append(c2 + Base.Vector(-self.tenonLength,-self.sideThickness,0))
         points.append(c2c)
 
         
@@ -220,38 +221,38 @@ class MiddlePart:
         w = Part.Wire(lines)
         f = Part.Face(w)
         p = f.extrude(Base.Vector(0,0,self.thickness))
-
-        offset = Base.Vector((self.backLength - topTenonLength -3*self.thickness)/2)
+        
+        offset = Base.Vector((self.backLength - self.tenonLength - self.attachWidth)/2)
         att1v1 = offset + c1
-        att1v2 = offset + c1+Base.Vector(3*self.thickness)
+        att1v2 = offset + c1+Base.Vector(self.attachWidth)
         att2v1 = offset + c4
-        att2v2 = offset + c4+Base.Vector(3*self.thickness)
+        att2v2 = offset + c4+Base.Vector(self.attachWidth)
         a1 = self.attachPart(att1v1,att1v2,Base.Vector(0,-1,0),toCut=toCut)
         a2 = self.attachPart(att2v1,att2v2,Base.Vector(0,1,0),toCut=toCut)
         part = p.fuse(a1)
         part = part.fuse(a2)
-        part.translate(Base.Vector(0,self.thickness,0))
+        part.translate(Base.Vector(0,self.sideThickness,0))
         return part 
     
     
     def rod(self):
         part = Part.makeCylinder(self.rodRadius, self.horseWidth 
-                + self.rodOver*2 + self.thickness*2
+                + self.rodOver*2 + self.sideThickness*2
                 ,Base.Vector(0,-self.rodOver), Base.Vector(0,1,0))
         boxXLength = self.rodRadius - self.rodTenonWidth/2
-        box = Part.makeBox(boxXLength,self.rodOver+self.thickness,self.rodRadius*2
+        box = Part.makeBox(boxXLength,self.rodOver+self.sideThickness,self.rodRadius*2
                             ,Base.Vector(-self.rodRadius,-self.rodOver, -self.rodRadius))
 
         part = part.cut(box)
         box.translate(Base.Vector(self.rodTenonWidth+boxXLength))
         part = part.cut(box)
-        box.translate(Base.Vector(0,self.horseWidth+self.rodOver+self.thickness))
+        box.translate(Base.Vector(0,self.horseWidth+self.rodOver+self.sideThickness))
         part = part.cut(box)
         box.translate(Base.Vector(-self.rodTenonWidth-boxXLength))
         part = part.cut(box)
         return part
 
-    def tenonPoints(self,p1,p2,direction,depth=thickness):
+    def tenonPoints(self,p1,p2,direction,depth=sideThickness):
         translationVector =  util.mult(direction,depth)
 
         p11 = p1 + translationVector
