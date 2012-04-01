@@ -7,7 +7,7 @@ from line import Line
 from middlepart import MiddlePart
 class Side:
         
-    thickness = 18;
+    thickness = 12;
 
     stopsWidth      = 50
     stopsHeight     = 60
