@@ -30,7 +30,7 @@ def makeMP2():
     util.makeRef(p0, p0+a3hf, p0+a3hf+a3lf, Base.Vector(0,0,30))
     mp = MiddlePart()
     p = mp.legHolder()
-    p.rotate(Base.Vector(0), Base.Vector(0,0,1) ,20)
+    #p.rotate(Base.Vector(0), Base.Vector(0,0,1) ,20)
     Part.show(p)
 
 def makeMP3():
@@ -38,20 +38,21 @@ def makeMP3():
     util.makeRef(p0, p0+a3hf, p0+a3hf+a3lf, Base.Vector(0,0,30))
     mp = MiddlePart()
     p = mp.seat()
-    b = mp.back(toCut=True)
-    
-    self=mp
-    tx = math.cos(self.r_alpha)*(self.legHolderLength + (self.thickness / math.sin(self.r_alpha)))
-    tz= math.sin(self.r_alpha)*(self.legHolderLength)
-    p.translate(Base.Vector(tx,0,tz))
-    
-    b.rotate(Base.Vector(0,0,0), Base.Vector(0,1,0), -(70))
-    tz2 = tz+self.thickness
-    tx2 = tx+ self.seatLength - self.seatBackBorder
-    b.translate(Base.Vector(tx2,0,tz2))
-    p = p.cut(b)
-    p.translate(Base.Vector(-tx,0,-tz))
     Part.show(p)
+#    b = mp.back(toCut=True)
+#    
+#    self=mp
+#    tx = math.cos(self.r_alpha)*(self.legHolderLength + (self.thickness / math.sin(self.r_alpha)))
+#    tz= math.sin(self.r_alpha)*(self.legHolderLength)
+#    p.translate(Base.Vector(tx,0,tz))
+#    
+#    b.rotate(Base.Vector(0,0,0), Base.Vector(0,1,0), -(70))
+#    tz2 = tz+self.thickness
+#    tx2 = tx+ self.seatLength - self.seatBackBorder
+#    b.translate(Base.Vector(tx2,0,tz2))
+#    p = p.cut(b)
+#    p.translate(Base.Vector(-tx,0,-tz))
+#    Part.show(p)
 
 def makeMP4():
     p0 = Base.Vector(-70,-25,0)

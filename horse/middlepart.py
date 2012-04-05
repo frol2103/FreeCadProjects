@@ -21,16 +21,18 @@ class MiddlePart:
     
     horseWidth          = 250
     
-    feetHolderLength    = 110
+    feetHolderLength    = 111
 
 
-    seatLength          = 215
+    seatLength          = 220
 
     backCurveDepth      = 30
-    backLength          = 150
+    backLength          = 175
 
     alpha               = 70
     r_alpha             = math.radians(alpha)
+    alphaseat           = 10
+    r_alphaseat              = math.radians(alphaseat)
 
     
     legHolderLength     = 110
@@ -69,10 +71,11 @@ class MiddlePart:
         lh.rotate(Base.Vector(0,0,0), Base.Vector(0,1,0), -(self.alpha))
         tx = math.cos(self.r_alpha)*self.legHolderLength  
         tz= math.sin(self.r_alpha)*(self.legHolderLength) -self.thickness 
+        s.rotate(Base.Vector(0,0,self.thickness), Base.Vector(0,1,0), self.alphaseat)
         s.translate(Base.Vector(tx,0,tz))
         b.rotate(Base.Vector(0,0,0), Base.Vector(0,1,0), -(70))
-        tz += (1-math.cos(self.r_alpha))*self.thickness 
-        tx += self.seatLength +math.sin(self.r_alpha)*self.thickness
+        tz += -self.seatLength*math.sin(self.r_alphaseat)+(1-math.cos(self.r_alpha))*self.thickness 
+        tx += self.seatLength*math.cos(self.r_alphaseat) +math.sin(self.r_alpha)*self.thickness
         b.translate(Base.Vector(tx,0,tz))
         
         util.concat(parts, fh)
@@ -86,6 +89,16 @@ class MiddlePart:
         r.translate(Base.Vector(200,0,400))
         util.concat(parts, r)
 
+        return parts
+    
+    def makeAll2(self, toCut=False):
+        parts = self.makeAll()
+        tr = Base.Vector(-215,0,-45)
+        for p in parts:
+            p.translate(tr)
+            p.rotate(Base.Vector(0,0,0), Base.Vector(0,1,0), -20)
+            p.translate(Base.Vector(123,0,0))
+            Part.show(p)
         return parts
 
     def feetHolder(self):
