@@ -6,6 +6,9 @@ import partspattern
 import side
 import middlepart
 import util
+
+
+
 def hreload():
     util.clear()
     reload(partspattern)
@@ -13,6 +16,7 @@ def hreload():
     reload(middlepart)
 
 def showHorse():
+    hreload();
     side.Side().showAll()
     middlepart.MiddlePart().showAll()
 

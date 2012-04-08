@@ -17,6 +17,8 @@ def show(parts):
         Part.show(parts)
  
 def concat(p1,p2):
+    if(p2 == None):
+        return
     if(type(p1) != type([])):
         p1 = [p1]
     

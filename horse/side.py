@@ -7,7 +7,7 @@ from line import Line
 from middlepart import MiddlePart
 class Side:
         
-    thickness = 18;
+    thickness = 15;
 
     stopsWidth      = 50
     stopsHeight     = 60
@@ -22,7 +22,7 @@ class Side:
     maneDestination = Base.Vector(145,0,425)
 
 
-    horseWidth          = 270
+    horseWidth          = 250
 
     def showAll(self,pnt=Base.Vector(0,0,0),dir=Base.Vector(0, 0, 1)):
         parts = [];
