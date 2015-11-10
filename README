@@ -1,1 +1,8 @@
-Use FreeCad
+Open free cad 
+view > workbench > OpenScad
+
+python console : 
+
+
+import sys;
+sys.path.append('/home/francois/.FreeCAD/Mod/MyScripts')
