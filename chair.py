@@ -48,10 +48,11 @@ def showAll(pnt=Base.Vector(0, 0, 0), dir=Base.Vector(0, 0, 1)):
 
 def chair(legChoise='perp'):
     parts = []
-    # concat(parts, leg(legChoise))
-    # concat(parts, translate(leg(legChoise,True), y(chairDepth-thickness)))
+    concat(parts, leg(legChoise))
+    concat(parts, translate(leg(legChoise,True), y(chairDepth-thickness)))
     concat(parts, back())
-    # concat(parts, seat())
+    concat(parts, seat())
+    concat(parts, attachs())
     return parts
 
 
@@ -127,9 +128,19 @@ def seat():
 
 
 def hooks():
-    def hookSide():
-        return box(40, thickness - grooveDepth, thickSmall) \
-            .fuse(box(legWidth + 20, thickness, thickSmall).transO(y(- thickness)).transO(x(- legWidth + 20))) \
-            .transO(x(hookWidthFromO-40))
-    
-    return hookSide()
+    def hookSide(left=True):
+        return box(40, thickness - grooveDepth, thickSmall).transO(O if left else y(internalPlankDepth + thickness - grooveDepth)) \
+            .fuse(box(legWidth + 30, thickness, thickSmall).transO(x(- legWidth + 10)).transO(y(- thickness) if left else y(thickness - grooveDepth + internalPlankDepth + thickness - grooveDepth))) \
+            .transO(x(hookWidthFromO-40)) 
+        
+    return hookSide().fuse(hookSide(False)).fuse(attachs())
+
+def attachs():
+    return box(thickSmall, 2 * grooveDepth, 50)\
+                .transO(z(-50 / 2))\
+                .rotO(y(1), angled)\
+                .transO(x(((legWidth - thickSmall) / 2) / math.sin(angleComp)))\
+                .transO(mult(dirLeg, 10))\
+                .transO(y(-grooveDepth))
+
+

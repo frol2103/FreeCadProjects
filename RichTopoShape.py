@@ -12,7 +12,10 @@ class RichTopoShape:
         return getattr(self.delegate, attr)
 
     def rotO(self, v, angle):
-        self.rotate(O,v,angle)
+        return self.rotate(O,v,angle)
+    
+    def rotate(self, v1, v2, angle):
+        self.delegate.rotate(v1,v2,angle)
         return self
 
     def transO(self, v):
