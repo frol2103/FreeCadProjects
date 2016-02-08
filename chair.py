@@ -10,10 +10,10 @@ angleComp = math.radians(90 - angled)
 sina = math.sin(angler)
 cosa = math.cos(angler)
 tana = math.tan(angler)
-height = 1500
+height = 1300
 legWidth = 100
-thickness = 18
-thickSmall = 18
+thickness = 20
+thickSmall = 15
 chairWidth = (height - legWidth * tana) * math.cos(angleComp) + (legWidth / math.sin(angleComp))
 chairDepth = 600
 dirLeg = xz(sina, cosa)
@@ -52,7 +52,6 @@ def chair(legChoise='perp'):
     concat(parts, translate(leg(legChoise,True), y(chairDepth-thickness)))
     concat(parts, back())
     concat(parts, seat())
-    concat(parts, attachs())
     return parts
 
 
@@ -114,7 +113,7 @@ def back():
                     .transO(x(supportXTrans))
                     .fuse(hooks())
                     .transO(mult(dirLeg, 3 * levelHeight))
-    ], mult(dirLeg, firstLevel + 12 * levelHeight))
+    ], mult(dirLeg, firstLevel + 10 * levelHeight))
 
 
 def seat():
@@ -123,7 +122,7 @@ def seat():
         partFromVectors([O, y(internalPlankDepth), xy(seatWidth, internalPlankDepth), x(seatWidth)], z(thickSmall))
             .transO(O - x(seatWidth / 2))
             .transO(y(thickness - grooveDepth))
-            .transO(mult(dirLeg, 1100))
+            .transO(mult(dirLeg, firstLevel + 10 * levelHeight))
     ]
 
 
@@ -136,11 +135,13 @@ def hooks():
     return hookSide().fuse(hookSide(False)).fuse(attachs())
 
 def attachs():
-    return box(thickSmall, 2 * grooveDepth, 50)\
-                .transO(z(-50 / 2))\
-                .rotO(y(1), angled)\
-                .transO(x(((legWidth - thickSmall) / 2) / math.sin(angleComp)))\
-                .transO(mult(dirLeg, 10))\
-                .transO(y(-grooveDepth))
-
+    def attach():
+        return box(thickSmall, 2 * grooveDepth, 50)\
+                    .transO(z(-50 / 2))\
+                    .rotO(y(1), angled)\
+                    .transO(x(((legWidth - thickSmall) / 2) / math.sin(angleComp)))\
+                    .transO(mult(dirLeg, 10))\
+                    .transO(y(-grooveDepth))
+    parts = attach().fuse(attach().transO(y(internalPlankDepth + 2 * thickness - grooveDepth - grooveDepth )))
+    return parts
 
