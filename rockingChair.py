@@ -20,7 +20,7 @@ angle=10
 #fava rocker
 
 def showAll(pnt=Base.Vector(0, 0, 0), dir=Base.Vector(0, 0, 1)):
-    util.clear()
+    #util.clear()
     parts = []
     spline()
 
@@ -54,7 +54,7 @@ def chair():
 
 def spline():
     points = [
-            xy(-670,-580),
+            xy(-530,-877),
             xy(-462,-321),
             xy(-85,-465),
             xy(85,-225),
@@ -62,14 +62,14 @@ def spline():
             xy(433,-237),
             xy(415,-610),
             xy(380,-702),
-            xy(273,-856)
+            xy(183,-946)
             ]
-    s = Draft.makeBSpline(points,closed=False)
+    s = Draft.makeBSpline(points,closed=True)
     Draft.rotate(s, angle,O,z(1))
     doc = FreeCAD.activeDocument()
     grp = doc.addObject("App::DocumentObjectGroup", "Workbench")
     grp.addObject(s)
-    grp.addObject(Draft.makeCircle(r, startangle=220 + angle,endangle=290 + angle))
+    grp.addObject(Draft.makeCircle(r))
 
 
 
