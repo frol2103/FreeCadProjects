@@ -4,6 +4,7 @@ from FreeCAD import Base
 import util
 from util import *
 import Draft
+from RichTopoShape import *
 
 
 backHeight=650
@@ -14,21 +15,22 @@ thickness=18
 
 thicknessSide=25
 r=seatHeight*3
-angle=10
+angle=-10
 
 
 #fava rocker
 
 def showAll(pnt=Base.Vector(0, 0, 0), dir=Base.Vector(0, 0, 1)):
-    #util.clear()
+    util.clear()
     parts = []
-    spline()
-
-
-
+    
     util.concat(parts,chair())
     doc = FreeCAD.activeDocument()
     grp = doc.addObject("App::DocumentObjectGroup", "Workbench")
+    util.concat(parts,side(doc,grp))
+
+
+
     print(parts)
     for p in parts:
         o = doc.addObject("Part::Feature", "Part")
@@ -46,13 +48,12 @@ def chair():
         .fuse(box(seatDepth,thickness, seatWidth).transO(y(seatHeight))) \
         .transO(x((-seatWidth/2))-y(r))  \
         .transO(z(-seatWidth))  \
-        .rotO(z(1),-10)
-
+        .rotO(z(1),angle)
         ]
         
 
 
-def spline():
+def side(doc,grp):
     points = [
             xy(-530,-877),
             xy(-462,-321),
@@ -64,12 +65,12 @@ def spline():
             xy(380,-702),
             xy(183,-946)
             ]
-    s = Draft.makeBSpline(points,closed=True)
-    Draft.rotate(s, angle,O,z(1))
-    doc = FreeCAD.activeDocument()
-    grp = doc.addObject("App::DocumentObjectGroup", "Workbench")
-    grp.addObject(s)
-    grp.addObject(Draft.makeCircle(r))
-
-
-
+    sp = Part.BSplineCurve()
+    sp.interpolate(points,True)
+    w = Part.Wire(sp.toShape())
+    f = Part.Face(w)
+    x = f.extrude(z(thicknessSide))
+    c = Part.makeCylinder(r,thicknessSide,O,z(1))
+    y = x.common(c)
+    y.translate(z(-thicknessSide))
+    return rich(y).rotO(z(1),20+angle)
