@@ -15,15 +15,14 @@ thickness=18
 
 thicknessSide=25
 r=seatHeight*3
-angle=-10
+angle=-20
 
 
 #fava rocker
 
 def showAll(pnt=Base.Vector(0, 0, 0), dir=Base.Vector(0, 0, 1)):
-    util.clear()
     parts = []
-    
+    util.clear()
     util.concat(parts,chair())
     doc = FreeCAD.activeDocument()
     grp = doc.addObject("App::DocumentObjectGroup", "Workbench")
@@ -55,8 +54,9 @@ def chair():
 
 def side(doc,grp):
     points = [
-            xy(-530,-877),
-            xy(-462,-321),
+            xy(-511,-825),
+            xy(-550,-491),
+            xy(-383,-395),
             xy(-85,-465),
             xy(85,-225),
             xy(299,-19),
@@ -65,6 +65,9 @@ def side(doc,grp):
             xy(380,-702),
             xy(183,-946)
             ]
+    #s = Draft.makeBSpline(points,closed=False) 
+    #grp.addObject(s)
+
     sp = Part.BSplineCurve()
     sp.interpolate(points,True)
     w = Part.Wire(sp.toShape())
