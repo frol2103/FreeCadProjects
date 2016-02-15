@@ -20,9 +20,13 @@ angle=-20
 
 #fava rocker
 
+def grp():
+    doc = FreeCAD.activeDocument()
+    return doc.addObject("App::DocumentObjectGroup", "Workbench")
+
 def showAll(pnt=Base.Vector(0, 0, 0), dir=Base.Vector(0, 0, 1)):
     parts = []
-    util.clear()
+    #util.clear()
     util.concat(parts,chair())
     doc = FreeCAD.activeDocument()
     grp = doc.addObject("App::DocumentObjectGroup", "Workbench")
@@ -62,11 +66,12 @@ def side(doc,grp):
             xy(299,-19),
             xy(433,-237),
             xy(415,-610),
-            xy(380,-702),
-            xy(183,-946)
+            xy(307,-772),
+            xy(-120,-922)
             ]
     #s = Draft.makeBSpline(points,closed=False) 
     #grp.addObject(s)
+
 
     sp = Part.BSplineCurve()
     sp.interpolate(points,True)
@@ -76,4 +81,20 @@ def side(doc,grp):
     c = Part.makeCylinder(r,thicknessSide,O,z(1))
     y = x.common(c)
     y.translate(z(-thicknessSide))
-    return rich(y).rotO(z(1),20+angle)
+    x = rich(y).rotO(z(1),20+angle)
+    c = x.Solids[0].CenterOfMass
+    util.show(Part.makeSphere(50, c))
+    return x
+
+def quadrill():
+    g = grp()
+    origin = O + xy(-500,-1000)
+    for x in range(0,1000,100):
+        o = Draft.makeLine(origin + xy(x,0), origin + xy(x,1000))
+        g.addObject(o)
+    
+    for y in range(0,1000,100):
+        Draft.makeLine(origin + xy(0,y), origin + xy(1000,y))
+
+
+
