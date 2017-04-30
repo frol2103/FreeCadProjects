@@ -15,7 +15,7 @@ thickness=18
 
 thicknessSide=25
 r=seatHeight*3
-angle=-20
+angle=-10
 
 
 #fava rocker
@@ -66,8 +66,8 @@ def side(doc,grp):
             xy(299,-19),
             xy(433,-237),
             xy(415,-610),
-            xy(307,-772),
-            xy(-120,-922)
+            xy(380,-702),
+            xy(183,-922)
             ]
     #s = Draft.makeBSpline(points,closed=False) 
     #grp.addObject(s)
@@ -79,6 +79,7 @@ def side(doc,grp):
     f = Part.Face(w)
     x = f.extrude(z(thicknessSide))
     c = Part.makeCylinder(r,thicknessSide,O,z(1))
+    util.show(Part.makeSphere(10, O))
     y = x.common(c)
     y.translate(z(-thicknessSide))
     x = rich(y).rotO(z(1),20+angle)
@@ -88,13 +89,15 @@ def side(doc,grp):
 
 def quadrill():
     g = grp()
-    origin = O + xy(-500,-1000)
-    for x in range(0,1000,100):
-        o = Draft.makeLine(origin + xy(x,0), origin + xy(x,1000))
+    origin = O + xy(-500,-900)
+    w=1100
+    h=1000
+    for x in range(0,w+100,100):
+        o = Draft.makeLine(origin + xy(x,0), origin + xy(x,h))
         g.addObject(o)
     
-    for y in range(0,1000,100):
-        Draft.makeLine(origin + xy(0,y), origin + xy(1000,y))
+    for y in range(0,h+100,100):
+        Draft.makeLine(origin + xy(0,y), origin + xy(w,y))
 
 
 

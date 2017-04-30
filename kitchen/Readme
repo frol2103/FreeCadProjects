@@ -1,0 +1,19 @@
+Kitchen
+===========
+
+Usage:
+------------
+
+1. Open FreeCAD
+2. new document
+3. run : 
+
+```python
+import sys;
+sys.path.append('/home/francois/.FreeCAD/Mod/MyScripts/kitchen')
+sys.path.append('/home/francois/.FreeCAD/Mod/MyScripts/utils')
+import kitchen
+kitchen.showAll()
+```
+
+
