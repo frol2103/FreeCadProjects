@@ -5,6 +5,9 @@ from FreeCAD import Base
 O=Base.Vector(0,0,0)
 
 class RichTopoShape:
+    def isRich(self):
+        return true
+
     def __init__(self, shape):
         self.delegate = shape
 

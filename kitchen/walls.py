@@ -9,8 +9,9 @@ from RichTopoShape import *
 wallThick=30
 interiorWallThick=10
 wallMinHeight=210
+wallMaxHeight=380
 
-mh=wallMinHeight
+mh=wallMaxHeight
 wt=wallThick
 iwt=interiorWallThick
 
@@ -90,16 +91,15 @@ def stairs():
 def houseBox():
     w = faceFromVectors([O,x(1000),xy(1000,1000),y(1000)])
     f = faceFromVectors([xy(500-1,500-1),xy(500+1,500-1),xy(500+1,501),xy(500-1,501)])
-    f.translate(z(400))
-    print(w.Wires)
-    print(f.Wires)
-    return [ 
-                box(1000,1000,200),
-                rich(Part.makeLoft([
-                    w.Wires[0],
-                    f.Wires[0],
-                ])).transO(z(210))
-            ]
+    f.translate(z(wallMaxHeight-wallMinHeight))
+
+    b=util.box(1000,1000,wallMinHeight)
+    roof=rich(Part.makeLoft([
+        w.Wires[0],
+        f.Wires[0],
+    ],True)).transO(z(wallMinHeight))
+    return (util.fuse([b,roof])
+            .transO(xy(-1000+width,-1000+length)))
 
 
 
