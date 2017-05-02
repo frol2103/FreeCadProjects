@@ -35,4 +35,8 @@ class RichTopoShape:
           return RichTopoShape(self.delegate.fuse(p))
 
 def rich(s):
-  return RichTopoShape(s)
+    if(hasattr(s, 'delegate')):
+        return s
+    else:
+        return RichTopoShape(s)
+        

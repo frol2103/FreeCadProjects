@@ -7,10 +7,12 @@ import Draft
 from RichTopoShape import *
 
 wallThick=30
+interiorWallThick=10
 wallMinHeight=210
 
 mh=wallMinHeight
 wt=wallThick
+iwt=interiorWallThick
 
 windowThick=15
 
@@ -38,15 +40,17 @@ def allParts():
     util.concat(parts,mainWalls())
     util.concat(parts,windowDoor())
     util.concat(parts,stairs())
+    util.concat(parts,houseBox())
     return parts
     
 def mainWalls():
-    return [
-            box(wt,length,mh),
+    return util.fuse([
+            box(iwt,280+wt,mh).transO(xy(width-iwt-370-wt, length-280-wt)),
+            box(60,iwt,mh).transO(y(length-wt-280)),
             box(285,windowThick,mh).transO(x(width-285-wt)),
-            box(width,wt,mh).transO(y(length-wt)),
+            box(width-wt-60,wt,mh).transO(xy(60,length-wt)),
             box(wt,length,mh).transO(x(width-wt)),
-            ]
+            ])
 
 def windowDoor():
     return [
@@ -69,7 +73,7 @@ def stairs():
                 xy(length-bevel,wallThickness),
                 xy(bevel,wallThickness),
                 ]
-        return partFromVectors(points,z(10)).transO(x(border)).transO(toCenter).rotO(z(1),angle*i)
+        return partFromVectors(points,z(mh)).transO(x(border)).transO(toCenter).rotO(z(1),angle*i)
 
     return util.fuse([
             side(0),
@@ -81,3 +85,21 @@ def stairs():
             side(6),
             side(7),
             ]).transO(xy(width-500,length-500))
+
+
+def houseBox():
+    w = faceFromVectors([O,x(1000),xy(1000,1000),y(1000)])
+    f = faceFromVectors([xy(500-1,500-1),xy(500+1,500-1),xy(500+1,501),xy(500-1,501)])
+    f.translate(z(400))
+    print(w.Wires)
+    print(f.Wires)
+    return [ 
+                box(1000,1000,200),
+                rich(Part.makeLoft([
+                    w.Wires[0],
+                    f.Wires[0],
+                ])).transO(z(210))
+            ]
+
+
+

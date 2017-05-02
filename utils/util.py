@@ -33,12 +33,15 @@ def concat(p1, p2):
     return p1
 
 
-def partFromVectors(points, extrudeV=Base.Vector(0, 0, 0)):
+def faceFromVectors(points):
     lines = []
     for i in range(0, len(points)):
         lines.append(Part.makeLine(points[i], points[(i + 1) % len(points)]))
     pass
-    return rich(Part.Face(Part.Wire(lines)).extrude(extrudeV))
+    return rich(Part.Face(Part.Wire(lines)))
+
+def partFromVectors(points, extrudeV=Base.Vector(0, 0, 0)):
+    return rich(faceFromVectors(points).extrude(extrudeV))
 
 def box(vx,vy,vz):
     return partFromVectors([O,x(vx), xy(vx,vy), y(vy)], z(vz))
