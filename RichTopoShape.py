@@ -5,6 +5,9 @@ from FreeCAD import Base
 O=Base.Vector(0,0,0)
 
 class RichTopoShape:
+    def __str__(self):
+        return "RichTopoShape of (" + str(self.delegate) + ")"
+
     def isRich(self):
         return true
 
@@ -32,10 +35,17 @@ class RichTopoShape:
           return RichTopoShape(self.delegate.cut(p))
 
     def fuse(self, p):
+        return RichTopoShape(self.delegate.fuse(shapeFromRich(p)))
+    
+    def common(self, p):
+        print("Rich::common")
+        return RichTopoShape(self.delegate.common(shapeFromRich(p)))
+
+def shapeFromRich(p):
         if(hasattr(p, 'delegate')):
-          return RichTopoShape(self.delegate.fuse(p.delegate))
+          return p.delegate
         else:
-          return RichTopoShape(self.delegate.fuse(p))
+          return p
 
 def rich(s):
     if(hasattr(s, 'delegate')):

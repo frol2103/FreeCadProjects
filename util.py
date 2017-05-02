@@ -2,6 +2,7 @@ import FreeCAD
 import Part
 from FreeCAD import Base
 from RichTopoShape import rich
+from RichTopoShape import RichTopoShape
 O = Base.Vector(0, 0, 0)
 
 
@@ -102,3 +103,8 @@ def z(v):
 
 def fuse(l): 
     return rich(reduce(lambda x,y : x.fuse(y), l))
+
+
+def common(template, shapes):
+    print(type(RichTopoShape(template)))
+    return map(lambda x: template.common(x), shapes)

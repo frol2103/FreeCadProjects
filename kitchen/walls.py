@@ -9,7 +9,7 @@ from RichTopoShape import *
 wallThick=30
 interiorWallThick=10
 wallMinHeight=210
-wallMaxHeight=380
+wallMaxHeight=375
 
 mh=wallMaxHeight
 wt=wallThick
@@ -41,8 +41,7 @@ def allParts():
     util.concat(parts,mainWalls())
     util.concat(parts,windowDoor())
     util.concat(parts,stairs())
-    util.concat(parts,houseBox())
-    return parts
+    return util.common(houseBox(),parts)
     
 def mainWalls():
     return util.fuse([
@@ -98,7 +97,7 @@ def houseBox():
         w.Wires[0],
         f.Wires[0],
     ],True)).transO(z(wallMinHeight))
-    return (util.fuse([b,roof])
+    return rich(util.fuse([b,roof])
             .transO(xy(-1000+width,-1000+length)))
 
 
