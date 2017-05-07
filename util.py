@@ -2,6 +2,7 @@ import FreeCAD
 import Part
 from FreeCAD import Base
 from RichTopoShape import rich
+from RichTopoShape import shapeFromRich
 from RichTopoShape import RichTopoShape
 O = Base.Vector(0, 0, 0)
 
@@ -106,5 +107,10 @@ def fuse(l):
 
 
 def common(template, shapes):
-    print(type(RichTopoShape(template)))
     return map(lambda x: template.common(x), shapes)
+
+def show(p):
+    Part.show(shapeFromRich(p))
+
+def flatten(l):
+    return [item for sublist in l for item in sublist]
