@@ -5,12 +5,14 @@ import Draft
 
 import util
 from util import *
+import RichTopoShape
 
 import walls
 
 def hreload():
     util.clear()
     reload(util)
+    reload(RichTopoShape)
     reload(walls)
 
 def showAll():

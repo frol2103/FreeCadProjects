@@ -48,6 +48,8 @@ def partFromVectors(points, extrudeV=Base.Vector(0, 0, 0)):
 def box(vx,vy,vz):
     return partFromVectors([O,x(vx), xy(vx,vy), y(vy)], z(vz))
 
+def square(p1,p2):
+    return faceFromVectors([O,p1,p1+p2,p2])
 
 def linesFromPoints(points, closed=False):
     lines = []

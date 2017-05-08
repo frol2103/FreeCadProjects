@@ -5,11 +5,13 @@ from FreeCAD import Base
 O=Base.Vector(0,0,0)
 
 class RichTopoShape:
+    color=(0.8,0.8,0.8)
+
     def __str__(self):
         return "RichTopoShape of (" + str(self.delegate) + ")"
 
     def isRich(self):
-        return true
+        return True
 
     def __init__(self, shape):
         self.delegate = shape
@@ -41,6 +43,13 @@ class RichTopoShape:
         print("Rich::common")
         return RichTopoShape(self.delegate.common(shapeFromRich(p)))
 
+    def add(self,doc,grp):
+        o = doc.addObject("Part::Feature", "Part")
+        o.Shape = self.delegate
+        o.ViewObject.ShapeColor=self.color
+        grp.addObject(o)
+        
+
 def shapeFromRich(p):
         if(hasattr(p, 'delegate')):
           return p.delegate
@@ -48,7 +57,7 @@ def shapeFromRich(p):
           return p
 
 def rich(s):
-    if(hasattr(s, 'delegate')):
+    if(hasattr(s, 'isRich') and s.isRich()):
         return s
     else:
         return RichTopoShape(s)
