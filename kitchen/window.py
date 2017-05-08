@@ -27,23 +27,22 @@ class Window:
         return util.common(self.box(),
                 util.concat([
                 self.glass(),
+                Part.makeLine(O,self.normalO(155)),
                 ],
-                util.fuse(map(lambda x: self.frame(self.face.Edges[x]),[0,1,2]))
+                util.fuse(map(lambda x: self.frame(self.face.Edges[x]),[0,1,2,3]))
                 ))
     
     def refPoint(self):
         return self.face.Edges[0].Vertexes[0].Point
 
-    def normalAtRef(self):
-        params=self.face.Surface.parameter(self.refPoint())
-        normal=self.face.normalAt(params[0],params[1])
-        return normal
 
     def normal(self):
         return Part.makeLine(self.refPoint(),self.normalAtRef())
     
     def normalO(self,size=1): 
-        return util.mult(self.normalAtRef()-self.refPoint(),size)
+        params=self.face.Surface.parameter(self.refPoint())
+        normal=self.face.normalAt(params[0],params[1])
+        return util.mult(normal,size)
 
     def show(self):
         map(lambda x: util.show(x), self.parts())
