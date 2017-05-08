@@ -6,19 +6,19 @@ from util import *
 import Draft
 from RichTopoShape import *
 
-wallThick=30
-interiorWallThick=10
-wallMinHeight=210
-wallMaxHeight=375
+wallThick=300
+interiorWallThick=100
+wallMinHeight=2100
+wallMaxHeight=3750
 
 mh=wallMaxHeight
 wt=wallThick
 iwt=interiorWallThick
 
-windowThick=15
+windowThick=150
 
-width=wt + 370 + 60
-length=655 + wt +windowThick
+width=wt + 3700 + 600
+length=6550 + wt +windowThick
 
 def showAll(pnt=Base.Vector(0, 0, 0), dir=Base.Vector(0, 0, 1)):
     parts = allParts()
@@ -45,27 +45,27 @@ def allParts():
     
 def mainWalls():
     return util.fuse([
-            box(iwt,280+wt,mh).transO(xy(width-iwt-370-wt, length-280-wt)),
-            box(60,iwt,mh).transO(y(length-wt-280)),
-            box(285,windowThick,mh).transO(x(width-285-wt)),
-            box(width-wt-60,wt,mh).transO(xy(60,length-wt)),
+            box(iwt,2800+wt,mh).transO(xy(width-iwt-3700-wt, length-2800-wt)),
+            box(600,iwt,mh).transO(y(length-wt-2800)),
+            box(2850,windowThick,mh).transO(x(width-2850-wt)),
+            box(width-wt-600,wt,mh).transO(xy(600,length-wt)),
             box(wt,length,mh).transO(x(width-wt)),
             ])
 
 def windowDoor():
     return [
-            box(3,85+95,mh).rotO(z(1),45).transO(xy(width-285-wt, windowThick))
+            box(30,850+950,mh).rotO(z(1),45).transO(xy(width-2850-wt, windowThick))
             ]
 
 def stairs():
     def side(i):
         angle=360/8.0
-        wallThickness=10
+        wallThickness=100
         wt=wallThickness
-        radius=90
+        radius=900
         length=2*math.tan(math.radians(angle/2.0))*radius
         border=((2*radius)-length)/2
-        toCenter=xy(-90,-90)
+        toCenter=xy(-900,-900)
         bevel=wt/math.tan(math.radians(90-(angle/2.0)))
         points=[
                 O,
@@ -84,21 +84,21 @@ def stairs():
             side(5),
             side(6),
             side(7),
-            ]).transO(xy(width-500,length-500))
+            ]).transO(xy(width-5000,length-5000))
 
 
 def houseBox():
-    w = faceFromVectors([O,x(1000),xy(1000,1000),y(1000)])
-    f = faceFromVectors([xy(500-1,500-1),xy(500+1,500-1),xy(500+1,501),xy(500-1,501)])
+    w = faceFromVectors([O,x(10000),xy(10000,10000),y(10000)])
+    f = faceFromVectors([xy(5000-1,5000-1),xy(5000+1,5000-1),xy(5000+1,5001),xy(5000-1,5001)])
     f.translate(z(wallMaxHeight-wallMinHeight))
 
-    b=util.box(1000,1000,wallMinHeight)
+    b=util.box(10000,10000,wallMinHeight)
     roof=rich(Part.makeLoft([
         w.Wires[0],
         f.Wires[0],
     ],True)).transO(z(wallMinHeight))
     return rich(util.fuse([b,roof])
-            .transO(xy(-1000+width,-1000+length)))
+            .transO(xy(-10000+width,-10000+length)))
 
 
 
