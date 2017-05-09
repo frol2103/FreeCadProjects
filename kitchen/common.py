@@ -40,3 +40,6 @@ def limitToHouseBox(parts):
 
 def limitFaceToHouseBox(part):
     return part.common(houseBox()).delegate.Faces[0]
+
+def houseFloor():
+        return square(x(100000),y(100000)).transO(xy(-10000+width,-10000+length))

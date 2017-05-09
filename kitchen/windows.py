@@ -40,17 +40,24 @@ def windowDoor():
     houseDiagonal=diag(5000)
     patioDiagonal=diag(3150)
     windowDoorLength=houseDiagonal-patioDiagonal-(900)
+    
+    face=square(y(windowDoorLength), z(wallMaxHeight))
+    return internalWindow(face \
+                    .rotO(z(1),45) \
+                    .transO(xy(width-3150, windowThick)))
+
+
+
+def internalWindow(face):
+    lowTemplateBox=houseFloor().extrude(z(wallMinHeight))
+
     return map(lambda w:w \
                     .withFrameThickness(100) \
                     .withBoxDepth(100)
             ,
             [
-            window.Window(square(y(windowDoorLength),z(wallMinHeight)) \
-                    .rotO(z(1),45) \
-                    .transO(xy(width-3150, windowThick)))
-                    .noFrameForEdges([0,2]),
-            window.Window(limitFaceToHouseBox(square(y(windowDoorLength),z(wallMaxHeight)) \
-                    .rotO(z(1),45) \
-                    .transO(v(width-3150, windowThick, wallMinHeight))))
+                window.Window(face.commonFace(lowTemplateBox)) \
+                        .noFrameForEdges([0,2]),
+                window.Window(face.cutFace(lowTemplateBox).commonFace(houseBox())), \
             ])
 

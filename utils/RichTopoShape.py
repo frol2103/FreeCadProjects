@@ -38,11 +38,19 @@ class RichTopoShape:
         else:
           return RichTopoShape(self.delegate.cut(p))
 
+    def cutFace(self,p):
+        return rich(self.cut(p).delegate.Faces[0])
+        
+
     def fuse(self, p):
         return RichTopoShape(self.delegate.fuse(shapeFromRich(p)))
     
     def common(self, p):
         return RichTopoShape(self.delegate.common(shapeFromRich(p)))
+    
+    def commonFace(self, p):
+        return rich(self.common(p).delegate.Faces[0])
+
 
     def withColor(self,c):
         self.color=c
