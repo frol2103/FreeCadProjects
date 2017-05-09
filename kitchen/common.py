@@ -37,3 +37,6 @@ def heightAt(wallDist):
 
 def limitToHouseBox(parts):
     return map(lambda p: p.common(houseBox()),parts)
+
+def limitFaceToHouseBox(part):
+    return part.common(houseBox()).delegate.Faces[0]

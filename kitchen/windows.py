@@ -25,7 +25,8 @@ def allWindows():
 
 def gardenWindows():
     dest=x(width-2850-wallThick)
-    return map(lambda x: window.Window(x)
+    return map(lambda x: window.Window(x)\
+            .withFrameThickness(150) \
             .withBoxDepth(150),
     [
         util.square(x(2850),z(wallMinHeight)).transO(dest),
@@ -35,15 +36,21 @@ def gardenWindows():
 
 
 def windowDoor():
-    houseDiagonal=math.sqrt(5000*5000)
-    patioDiagonal=math.sqrt(3000*3000)
-
-    windowDoorLength=houseDiagonal-patioDiagonal-(900/2)
-    return map(lambda x: window.Window(x) \
-                    .withBoxDepth(150)
+    def diag(x): return math.sqrt(x*x*2)
+    houseDiagonal=diag(5000)
+    patioDiagonal=diag(3150)
+    windowDoorLength=houseDiagonal-patioDiagonal-(900)
+    return map(lambda w:w \
+                    .withFrameThickness(100) \
+                    .withBoxDepth(100)
             ,
-            map(lambda x: x.delegate.Faces[0],limitToHouseBox([
-            square(y(windowDoorLength),z(wallMaxHeight)) \
+            [
+            window.Window(square(y(windowDoorLength),z(wallMinHeight)) \
                     .rotO(z(1),45) \
-                    .transO(xy(width-2850-wallThick, windowThick)) \
-            ])))
+                    .transO(xy(width-3150, windowThick)))
+                    .noFrameForEdges([0,2]),
+            window.Window(limitFaceToHouseBox(square(y(windowDoorLength),z(wallMaxHeight)) \
+                    .rotO(z(1),45) \
+                    .transO(v(width-3150, windowThick, wallMinHeight))))
+            ])
+

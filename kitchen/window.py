@@ -8,13 +8,14 @@ class Window:
     
 
     frameWidth=60
-    frameDepth=30
+    frameThickness=30
 
     boxDepth=300
 
     glassThickness=10
 
     face = None
+    edgesFrameIgnore=[]
     
 
     def __str__(self):
@@ -60,7 +61,8 @@ class Window:
 
     def frame(self):
         return self.box().common(
-                    util.fuse(map(lambda x: self.edgeFrame(self.face.Edges[x]),[0,1,2,3]))
+                    util.fuse(map(lambda x: self.edgeFrame(self.face.Edges[x]),
+                        set([0,1,2,3]) - set(self.edgesFrameIgnore) ))
                     ) \
                 .withColor((0.67,0.33,0.00)) \
                 .withName("windowFrame")
@@ -72,7 +74,7 @@ class Window:
         v1=edge.Vertexes[1].Point
         pts = [v0+p,v1+p,v1-p,v0-p]
         face = util.faceFromVectors(pts)
-        return self.extrudeInCenter(face,self.frameDepth) \
+        return self.extrudeInCenter(face,self.frameThickness) \
 
     def box(self):
         return rich(self.face.extrude(self.normalO(self.boxDepth)))
@@ -86,3 +88,12 @@ class Window:
     def extrudeInCenter(self,face,depth):
         return rich(face.extrude(self.normalO(depth))) \
                 .transO(self.normalO((self.boxDepth - depth)/2))
+
+    def withFrameThickness(self,t):
+        self.frameThickness = t
+        return self
+
+    def noFrameForEdges(self,e):
+        self.edgesFrameIgnore=e
+        return self
+    
