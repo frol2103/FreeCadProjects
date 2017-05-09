@@ -21,6 +21,13 @@ def show(parts):
     else:
         Part.show(parts)
 
+def addGroup(name,parts):
+    doc = FreeCAD.activeDocument()
+    grp = doc.addObject("App::DocumentObjectGroup", name)
+
+    for p in parts:
+        rich(p).add(doc,grp)
+
 
 def concat(p1, p2):
     if(p2 == None):

@@ -24,14 +24,11 @@ class Window:
         self.face = face
     
     def parts(self):
-        return util.common(self.box(),
-                util.concat([
+        return [
                 self.glass(),
-                Part.makeLine(O,self.normalO(155)),
-                ],
-                util.fuse(map(lambda x: self.frame(self.face.Edges[x]),[0,1,2,3]))
-                ))
-    
+                self.frame(),
+                ]
+
     def refPoint(self):
         return self.face.Edges[0].Vertexes[0].Point
 
@@ -57,19 +54,35 @@ class Window:
         p=(c.Vertexes[1].Point - c.Vertexes[0].Point).normalize()
         return p
 
-    def frame(self,edge):
+    def withBoxDepth(self,d):
+        self.boxDepth = d
+        return self
+
+    def frame(self):
+        return self.box().common(
+                    util.fuse(map(lambda x: self.edgeFrame(self.face.Edges[x]),[0,1,2,3]))
+                    ) \
+                .withColor((0.67,0.33,0.00)) \
+                .withName("windowFrame")
+
+
+    def edgeFrame(self,edge):
         p=util.mult(self.perpendicularTo(edge),self.frameWidth)
         v0=edge.Vertexes[0].Point
         v1=edge.Vertexes[1].Point
         pts = [v0+p,v1+p,v1-p,v0-p]
         face = util.faceFromVectors(pts)
-        return self.extrudeInCenter(face,self.frameDepth)
+        return self.extrudeInCenter(face,self.frameDepth) \
 
     def box(self):
         return rich(self.face.extrude(self.normalO(self.boxDepth)))
 
     def glass(self):
-        return self.extrudeInCenter(self.face,self.glassThickness)
+        return self.extrudeInCenter(self.face,self.glassThickness) \
+                .withColor((0.19,0.61,0.80)) \
+                .withName("glass") \
+                .withTransparency(90)
 
     def extrudeInCenter(self,face,depth):
-        return rich(face.extrude(self.normalO(depth))).transO(self.normalO((self.boxDepth - depth)/2))
+        return rich(face.extrude(self.normalO(depth))) \
+                .transO(self.normalO((self.boxDepth - depth)/2))
