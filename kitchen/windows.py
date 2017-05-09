@@ -20,6 +20,7 @@ def allWindows():
     parts = []
     util.concat(parts,gardenWindows())
     util.concat(parts,windowDoor())
+    util.concat(parts,hallDoor())
     return parts
 
 
@@ -61,3 +62,9 @@ def internalWindow(face):
                 window.Window(face.cutFace(lowTemplateBox).commonFace(houseBox())), \
             ])
 
+def hallDoor():
+    doorLength=5000-2800-wallThick-900
+    print(doorLength)
+    return internalWindow(
+            square(y(doorLength), z(wallMaxHeight)).transO(y(length-2800-wallThick-doorLength))
+            )
