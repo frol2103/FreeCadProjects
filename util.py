@@ -150,11 +150,13 @@ def faceAlong(face,edge,dist):
     v1=edge.Vertexes[1].Point
     pts = [v0+p,v1+p,v1-p,v0-p]
     trimFace = faceFromVectors(pts)
-    
-    return face.common(trimFace)
+    return trimFace.common(face)
 
 def trimAlong(face,edge,dist):
-    return face.cut(faceAlong(face,edge,dist))
+    return rich(face).cut(faceAlong(face,edge,dist)).Faces[0]
+
+def trimFace(face, dist):
+    return reduce(lambda f,e : trimAlong(f,e,dist), face.Edges,face)
 
 def splitFaceAlong(face,direction ,splitDist):
     def no0(v): 
@@ -162,18 +164,43 @@ def splitFaceAlong(face,direction ,splitDist):
         else: return v
 
     bb=face.BoundBox
-    d = direction.normalize()
+    dn = direction.normalize()
+    d = v(abs(dn.x), abs(dn.y), abs(dn.z))
+
+    print(d)
+
+    xMax = abs(d.x) >= abs(d.y) and abs(d.x) >= abs(d.z)
+    yMax = abs(d.y) >  abs(d.x) and abs(d.y) >= abs(d.z)
+    zMax = abs(d.z) >  abs(d.x) and abs(d.z) >  abs(d.y)
+    assert (xMax + yMax + zMax) == 1
+
+    def principalDirectionLength():
+        if(xMax): return bb.XLength / d.x
+        elif(yMax): return bb.YLength / d.y
+        elif(zMax): return bb.ZLength / d.z
+
+
     splitDistStart = concat(0,splitDist)
-    splitDistEnd = concat(splitDist,max(bb.XMax, bb.YMax,bb.ZMax))
-    print(splitDistStart)
-    print(splitDistEnd)
-    for i in range(0,len(splitDistStart)):
+    splitDistEnd = concat(splitDist,principalDirectionLength())
+
+    def part(i):
         start=splitDistStart[i]
         end=splitDistEnd[i]
         size=end-start
-        b = box(no0(size*direction.x), no0(size*direction.y),no0(size*direction.z))\
-            .transO(v(start*direction.x, start*direction.y, start*direction.z))
-        show(b)
 
-    return face
+        sizeX=no0(size*d.x) if xMax else no0(bb.XLength)
+        sizeY=no0(size*d.y) if yMax else no0(bb.YLength)
+        sizeZ=no0(size*d.z) if zMax else no0(bb.ZLength)
 
+        positionX=bb.XMin + start*d.x if xMax else bb.XMin
+        positionY=bb.YMin +  start*d.y if yMax else bb.YMin
+        positionZ=bb.XMin +  start*d.z if zMax else bb.ZMin
+        
+
+        return box(sizeX, sizeY,sizeZ)\
+            .transO(v(positionX,positionY,positionZ))
+
+    return map(lambda i : part(i).common(face).Faces[0],range(0,len(splitDistStart)))
+
+def dir(edge):
+    return (edge.Vertexes[1].Point - edge.Vertexes[0].Point).normalize()
