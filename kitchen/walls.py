@@ -8,7 +8,7 @@ from RichTopoShape import *
 import window
 import common
 from common import *
-
+import windows
 
 mh=wallMaxHeight
 wt=wallThick
@@ -28,12 +28,14 @@ def allParts():
         ])
     
 def mainWalls():
-    return util.fuse([
+    windowsToCut = windows.windowsToCut()
+
+    return reduce(lambda p,w : p.cut(w),windowsToCut,util.fuse([
             box(iwt,2800+wt,mh).transO(xy(width-iwt-3700-wt, length-2800-wt)),
             box(600,iwt,mh).transO(y(length-wt-2800)),
             box(width-wt-600,wt,mh).transO(xy(600,length-wt)),
             box(wt,length,mh).transO(x(width-wt)),
-            ])
+            ]))
 
 def stairs():
     def side(i):

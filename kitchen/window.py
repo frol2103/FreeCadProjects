@@ -60,12 +60,14 @@ class Window:
         return self
 
     def frame(self):
-        return self.box().common(
-                    util.fuse(map(lambda x: self.edgeFrame(self.face.Edges[x]),
-                        set([0,1,2,3]) - set(self.edgesFrameIgnore) ))
-                    ) \
-                .withColor((0.67,0.33,0.00)) \
-                .withName("windowFrame")
+        edges = set([0,1,2,3]) - set(self.edgesFrameIgnore)
+        if(len(edges) >0):
+            return self.box().common(
+                        util.fuse(map(lambda x: self.edgeFrame(self.face.Edges[x]),
+                            edges))
+                        ) \
+                    .withColor((0.67,0.33,0.00)) \
+                    .withName("windowFrame")
 
 
     def edgeFrame(self,edge):

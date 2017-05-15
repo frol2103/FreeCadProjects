@@ -1,5 +1,6 @@
 import FreeCAD
 import Part
+import sys
 from FreeCAD import Base
 from RichTopoShape import rich
 from RichTopoShape import shapeFromRich
@@ -112,14 +113,67 @@ def z(v):
     return Base.Vector(0, 0, v)
 
 def fuse(l): 
+    if(len(l) == 0): return None
     return rich(reduce(lambda x,y : x.fuse(y), l))
 
 
 def common(template, shapes):
     return map(lambda x: template.common(x), shapes)
 
+def cut(template, shapes):
+    return reduce(lambda t,x: t.cut(x), shapes, template)
+
 def show(p):
     Part.show(shapeFromRich(p))
 
 def flatten(l):
     return [item for sublist in l for item in sublist]
+
+def normalO(face,size=1): 
+    params=face.Surface.parameter(face.Edges[0].Vertexes[0].Point)
+    normal=face.normalAt(params[0],params[1])
+    return mult(normal,size)
+
+def perpendicularTo(edge,face):
+    v0 = edge.Vertexes[0].Point
+    c=edge.copy()
+    c.rotate(v0,
+            normalO(face),
+            90.0)
+
+    p=(c.Vertexes[1].Point - c.Vertexes[0].Point).normalize()
+    return p
+
+def faceAlong(face,edge,dist):
+    p=mult(perpendicularTo(edge, face),dist)
+    v0=edge.Vertexes[0].Point
+    v1=edge.Vertexes[1].Point
+    pts = [v0+p,v1+p,v1-p,v0-p]
+    trimFace = faceFromVectors(pts)
+    
+    return face.common(trimFace)
+
+def trimAlong(face,edge,dist):
+    return face.cut(faceAlong(face,edge,dist))
+
+def splitFaceAlong(face,direction ,splitDist):
+    def no0(v): 
+        if(v==0): return 1 
+        else: return v
+
+    bb=face.BoundBox
+    d = direction.normalize()
+    splitDistStart = concat(0,splitDist)
+    splitDistEnd = concat(splitDist,max(bb.XMax, bb.YMax,bb.ZMax))
+    print(splitDistStart)
+    print(splitDistEnd)
+    for i in range(0,len(splitDistStart)):
+        start=splitDistStart[i]
+        end=splitDistEnd[i]
+        size=end-start
+        b = box(no0(size*direction.x), no0(size*direction.y),no0(size*direction.z))\
+            .transO(v(start*direction.x, start*direction.y, start*direction.z))
+        show(b)
+
+    return face
+

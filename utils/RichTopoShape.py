@@ -65,11 +65,12 @@ class RichTopoShape:
         return self
 
     def add(self,doc,grp):
-        o = doc.addObject("Part::Feature", self.name)
-        o.Shape = self.delegate
-        o.ViewObject.ShapeColor=self.color
-        o.ViewObject.Transparency=self.transparency
-        grp.addObject(o)
+        if(self.delegate):
+            o = doc.addObject("Part::Feature", self.name)
+            o.Shape = self.delegate
+            o.ViewObject.ShapeColor=self.color
+            o.ViewObject.Transparency=self.transparency
+            grp.addObject(o)
         
 
 def shapeFromRich(p):
