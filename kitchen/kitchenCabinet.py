@@ -15,14 +15,20 @@ workplanThick=20
 workplanDepth=600
 workplanHeight=840
 
+fridgeHeight=1780
+fridgeWidth=910
+fridgeDepth=700
+fridgeAroundSpace=50
+
 def showAll(pnt=Base.Vector(0, 0, 0), dir=Base.Vector(0, 0, 1)):
     util.addGroup("Walls",allParts())
 
 def allParts():
     parts = []
     util.concat(parts,workplan())
-    return util.flatten([
+    return util.concats([
         util.common(houseBox(),parts),
+        fridge(),
         ])
     
 def workplan():
@@ -71,12 +77,12 @@ def extrudeFace(faces, dirFactor=1):
 def island():
 
     distBack=1680
-    topWidth=820 #?
-    topLength=1800 #?
+    topWidth=990
+    topLength=2000
     topHeight=890
-    backCabinetDepth=500 #?
+    backCabinetDepth=560
     backCabinetLength=1600
-    frontCabinetDepth=300 #?
+    frontCabinetDepth=300
     frontCabinetLength=1000
     topOverHead=topWidth-backCabinetDepth-frontCabinetDepth
 
@@ -108,3 +114,14 @@ def island():
             cBackFace,
             cFrontFace,
             ])
+
+
+fridgeBoxPosition = xy(600,length-2800-wallThick)
+
+def fridgeBox():
+    return box(fridgeDepth, fridgeWidth + 2* fridgeAroundSpace,fridgeHeight+fridgeAroundSpace)\
+            .transO(fridgeBoxPosition)
+        
+def fridge():
+    return box(fridgeDepth, fridgeWidth,fridgeHeight)\
+            .transO(fridgeBoxPosition + y(fridgeAroundSpace))
