@@ -42,6 +42,9 @@ def concat(p1, p2):
         p1.append(p2)
     return p1
 
+def concats(parts):
+    return reduce(lambda p1,p2: concat(p1,p2), parts,[])
+
 
 def faceFromVectors(points):
     lines = []

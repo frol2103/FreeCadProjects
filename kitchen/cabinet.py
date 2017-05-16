@@ -8,8 +8,8 @@ class Cabinet:
     face=None
 
     depth=600
-    faceDepth=40
-    
+    faceDepth=20
+    dirFactor = 1
 
     def __str__(self):
         return "Cabinet "
@@ -20,13 +20,11 @@ class Cabinet:
 
 
     def parts(self):
-        return util.concat(
-                [self.contentBox()],
-                faceMargin(self.face)
-                )
+        return [self.contentBox()]
+                
 
     def normalO(self,size=1): 
-        return util.normalO(self.face,size)
+        return mult(util.normalO(self.face,size), self.dirFactor)
 
     def perpendicularTo(self,edge):
         return util.perpendicularTo(edge,face)
@@ -39,11 +37,10 @@ class Cabinet:
                  .cut(self.face.extrude(self.normalO(self.faceDepth)))
 
 
-    def extrudeInCenter(self,face,depth):
-        return rich(face.extrude(self.normalO(depth))) \
-                .transO(self.normalO((self.boxDepth - depth)/2))
+    def withDepth(self,d):
+        self.depth = d
+        return self
 
-def faceMargin(face, margin=60):
-    return util.cut(face,map(lambda e : util.faceAlong(face,e,margin),
-            shapeFromRich(face).Edges))
-
+    def invertDir(self):
+        self.dirFactor = -1
+        return self
