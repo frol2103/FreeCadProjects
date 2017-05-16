@@ -170,8 +170,6 @@ def splitFaceAlong(face,direction ,splitDist):
     dn = direction.normalize()
     d = v(abs(dn.x), abs(dn.y), abs(dn.z))
 
-    print(d)
-
     xMax = abs(d.x) >= abs(d.y) and abs(d.x) >= abs(d.z)
     yMax = abs(d.y) >  abs(d.x) and abs(d.y) >= abs(d.z)
     zMax = abs(d.z) >  abs(d.x) and abs(d.z) >  abs(d.y)
@@ -197,13 +195,16 @@ def splitFaceAlong(face,direction ,splitDist):
 
         positionX=bb.XMin + start*d.x if xMax else bb.XMin
         positionY=bb.YMin +  start*d.y if yMax else bb.YMin
-        positionZ=bb.XMin +  start*d.z if zMax else bb.ZMin
+        positionZ=bb.ZMin +  start*d.z if zMax else bb.ZMin
         
 
-        return box(sizeX, sizeY,sizeZ)\
+        
+        p=box(sizeX, sizeY,sizeZ)\
             .transO(v(positionX,positionY,positionZ))
+        return p.common(face).Faces[0]
 
-    return map(lambda i : part(i).common(face).Faces[0],range(0,len(splitDistStart)))
+
+    return map(lambda i : part(i),range(0,len(splitDistStart)))
 
 def dir(edge):
     return (edge.Vertexes[1].Point - edge.Vertexes[0].Point).normalize()

@@ -1,6 +1,7 @@
 import util
 from util import *
 import Part
+import kitchenCabinet
 
 def test():
     util.clear()
@@ -23,3 +24,9 @@ def sBuild():
     return square(x(2000), z(800))\
         .transO(v(400,236,548))\
         .rotO(y(12),56)
+
+def island():
+    util.clear()
+    reload(kitchenCabinet)
+    reload(util)
+    util.addGroup("island", kitchenCabinet.island())

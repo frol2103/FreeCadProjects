@@ -59,11 +59,14 @@ def workplanRightPart():
                 box(wpWidth,workplanDepth,workplanThick)\
                                 .transO(position + z(workplanHeight)),
                 c.parts(),
-                map(lambda f : f.extrude(y(10)),
+                extrudeFace(
                     map(lambda f: util.trimFace(f,3),
                     util.splitFaceAlong(c.face,x(1),[600,1100,1600,2200])))
             ])
 
+
+def extrudeFace(faces, dirFactor=1): 
+    return map(lambda f : f.extrude(util.mult(y(10),dirFactor)), faces)
 
 def island():
 
@@ -83,10 +86,17 @@ def island():
                 .withDepth(backCabinetDepth)\
                 .invertDir()
 
+    cBackFace = extrudeFace(util.flatten(map(lambda f:util.splitFaceAlong(f,z(1),[topHeight/2]),
+            util.splitFaceAlong(cBack.face,x(1),[backCabinetLength/2]))),
+            -1
+            )
+
     cFront = cabinet.Cabinet(square(x(frontCabinetLength), z(topHeight)) \
                 .transO(xy(width-frontCabinetLength - wallThick,
                     length -wallThick - distBack - topOverHead - backCabinetDepth - frontCabinetDepth))) \
                 .withDepth(frontCabinetDepth)\
+    
+    cFrontFace = extrudeFace(util.splitFaceAlong(cFront.face,x(1),[frontCabinetLength/2]))
 
     return util.concats([
             box(topLength, topWidth, workplanThick)\
@@ -95,4 +105,6 @@ def island():
                     topHeight)),
             cBack.parts(),
             cFront.parts(),
+            cBackFace,
+            cFrontFace,
             ])
