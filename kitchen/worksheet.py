@@ -8,7 +8,6 @@ def test():
     reload(util); 
     s = sBuild()
     bb = s.BoundBox
-    print(bb)
     box = util.box(max(1,bb.XLength),max(1,bb.YLength),max(1,bb.ZLength))\
             .transO(v(bb.XMin,bb.YMin, bb.ZMin))
 
@@ -18,7 +17,6 @@ def test():
     util.show(e)
     splits = util.splitFaceAlong(s,util.dir(e),[100,500,800]); 
     util.addGroup("splits",map(lambda f: util.trimFace(f,10),splits))
-    print(splits)
 
 def sBuild(): 
     return square(x(2000), z(800))\
@@ -30,3 +28,9 @@ def island():
     reload(kitchenCabinet)
     reload(util)
     util.addGroup("island", kitchenCabinet.island())
+
+def upCabinet():
+    util.clear()
+    reload(kitchenCabinet)
+    reload(util)
+    util.addGroup("upcabinet", kitchenCabinet.upCabinet())

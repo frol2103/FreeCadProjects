@@ -33,6 +33,8 @@ def allParts():
         util.common(houseBox(),parts),
         fridge(),
         fridgeCabinet(),
+        upCabinet(),
+        hoodCabinet(),
         ])
     
 def workplan():
@@ -153,3 +155,35 @@ def fridgeCabinet():
 
 def splitIn(length, howMany):
     return map(lambda i : i*(length/howMany),range(1,howMany))
+
+hoodHeight=1700
+
+def upCabinet():
+    cabinetWidth=width-platesCabinetWidth-workplanWindowLength -600 - wallThick +150
+    c=cabinet.Cabinet(square(x(cabinetWidth), z(2000))\
+            .transO(v(platesCabinetWidth+600, length-wallThick-600, hoodHeight))\
+            .commonFace(houseBox())
+            )
+
+    faces = util.splitFaceAlong(c.face, x(1), [cabinetWidth/2])
+
+    return util.concats([
+        util.common(houseBox(),c.parts()),
+        faces,
+        ])
+
+
+
+def hoodCabinet():
+    face = util.faceFromVectors([O,\
+            y(platesCabinetWidth),\
+            xy(platesCabinetWidth,platesCabinetWidth),\
+            xy(platesCabinetWidth, platesCabinetWidth-600),\
+            x(600),
+            ])
+
+    return rich(face \
+            .transO(z(hoodHeight))\
+            .transO(xy(600,length-wallThick-platesCabinetWidth))\
+            .extrude(z(1000)))\
+            .common(houseBox())

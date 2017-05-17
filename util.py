@@ -163,7 +163,7 @@ def trimFace(face, dist):
 
 def splitFaceAlong(face,direction ,splitDist):
     def no0(v): 
-        if(v==0): return 1 
+        if(abs(v)<0.0001): return 1 
         else: return v
 
     bb=face.BoundBox
@@ -197,7 +197,7 @@ def splitFaceAlong(face,direction ,splitDist):
         positionY=bb.YMin +  start*d.y if yMax else bb.YMin
         positionZ=bb.ZMin +  start*d.z if zMax else bb.ZMin
         
-
+        print("part" + str((sizeX, sizeY,sizeZ)))
         
         p=box(sizeX, sizeY,sizeZ)\
             .transO(v(positionX,positionY,positionZ))

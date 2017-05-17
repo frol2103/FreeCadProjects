@@ -16,6 +16,7 @@ width=wallThick + 3700 + 600
 
 length=6550 + wallThick +windowThick
 fridgeWallLength=2800
+workplanWindowLength=1200
 
 def houseBox():
     w = faceFromVectors([O,x(10000),xy(10000,10000),y(10000)])
