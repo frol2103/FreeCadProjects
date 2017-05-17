@@ -20,6 +20,9 @@ fridgeWidth=910
 fridgeDepth=700
 fridgeAroundSpace=50
 
+platesCabinetWidth=1060
+
+
 def showAll(pnt=Base.Vector(0, 0, 0), dir=Base.Vector(0, 0, 1)):
     util.addGroup("Walls",allParts())
 
@@ -29,6 +32,7 @@ def allParts():
     return util.concats([
         util.common(houseBox(),parts),
         fridge(),
+        fridgeCabinet(),
         ])
     
 def workplan():
@@ -39,10 +43,10 @@ def workplan():
             ])
 
 def workplanPlates():
-    face = faceFromVectors([O,y(1060),xy(1060,1060),xy(1060,1060-workplanDepth),x(workplanDepth)])
+    face = faceFromVectors([O,y(platesCabinetWidth),xy(platesCabinetWidth,platesCabinetWidth),xy(platesCabinetWidth,platesCabinetWidth-workplanDepth),x(workplanDepth)])
     position =  xy(
                         600,
-                        length-wallThick-1060
+                        length-wallThick-platesCabinetWidth
                     ) 
 
     return [rich(face \
@@ -55,9 +59,9 @@ def workplanPlates():
 
 
 def workplanRightPart():
-    wpWidth=width-1060-600-wallThick
+    wpWidth=width-platesCabinetWidth-600-wallThick
     position=xy(
-                1060+600, 
+                platesCabinetWidth+600, 
                 length-wallThick-workplanDepth)
 
     c=cabinet.Cabinet(square(x(wpWidth),z(workplanHeight)).transO(position))
@@ -116,7 +120,7 @@ def island():
             ])
 
 
-fridgeBoxPosition = xy(600,length-2800-wallThick)
+fridgeBoxPosition = xy(600,length-fridgeWallLength-wallThick)
 
 def fridgeBox():
     return box(fridgeDepth, fridgeWidth + 2* fridgeAroundSpace,fridgeHeight+fridgeAroundSpace)\
@@ -125,3 +129,27 @@ def fridgeBox():
 def fridge():
     return box(fridgeDepth, fridgeWidth,fridgeHeight)\
             .transO(fridgeBoxPosition + y(fridgeAroundSpace))
+
+
+def fridgeCabinet():
+    c = cabinet.Cabinet(square(y(fridgeWallLength - platesCabinetWidth ),z(wallMaxHeight)) \
+            .transO(xy(600 + 600,length-fridgeWallLength-wallThick)) \
+            .cutFace(fridgeBox()) \
+            .commonFace(houseBox()))
+
+    fridgeBoxLength=fridgeBox().BoundBox.YLength
+
+    faces = util.splitFaceAlong(c.face, y(1), [fridgeBoxLength/2,fridgeBoxLength])
+    fridgeBoxHeight = fridgeBox().BoundBox.ZLength
+    return util.concats([
+        c.parts(),
+        extrudeFace(util.concats([
+                faces[0],
+                faces[1],
+                util.splitFaceAlong(faces[2], z(1), util.concat(splitIn(fridgeHeight,5), fridgeHeight))
+            ])),
+        ])
+
+
+def splitIn(length, howMany):
+    return map(lambda i : i*(length/howMany),range(1,howMany))
