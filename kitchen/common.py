@@ -18,6 +18,9 @@ length=6550 + wallThick +windowThick
 fridgeWallLength=2800
 workplanWindowLength=1200
 
+islandDistBack=1680
+islandTopWidth=990
+
 def houseBox():
     w = faceFromVectors([O,x(10000),xy(10000,10000),y(10000)])
     f = faceFromVectors([xy(5000-1,5000-1),xy(5000+1,5000-1),xy(5000+1,5001),xy(5000-1,5001)])

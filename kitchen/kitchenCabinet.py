@@ -82,19 +82,17 @@ def extrudeFace(faces, dirFactor=1):
 
 def island():
 
-    distBack=1680
-    topWidth=990
     topLength=2000
     topHeight=890
     backCabinetDepth=560
     backCabinetLength=1600
     frontCabinetDepth=300
     frontCabinetLength=1000
-    topOverHead=topWidth-backCabinetDepth-frontCabinetDepth
+    topOverHead=islandTopWidth-backCabinetDepth-frontCabinetDepth
 
     cBack = cabinet.Cabinet(square(x(backCabinetLength), z(topHeight)) \
                 .transO(xy(width-backCabinetLength - wallThick,
-                    length -wallThick - distBack - topOverHead))) \
+                    length -wallThick - islandDistBack - topOverHead))) \
                 .withDepth(backCabinetDepth)\
                 .invertDir()
 
@@ -105,15 +103,15 @@ def island():
 
     cFront = cabinet.Cabinet(square(x(frontCabinetLength), z(topHeight)) \
                 .transO(xy(width-frontCabinetLength - wallThick,
-                    length -wallThick - distBack - topOverHead - backCabinetDepth - frontCabinetDepth))) \
+                    length -wallThick - islandDistBack - topOverHead - backCabinetDepth - frontCabinetDepth))) \
                 .withDepth(frontCabinetDepth)\
     
     cFrontFace = extrudeFace(util.splitFaceAlong(cFront.face,x(1),[frontCabinetLength/2]))
 
     return util.concats([
-            box(topLength, topWidth, workplanThick)\
+            box(topLength, islandTopWidth, workplanThick)\
                 .transO(v(width-topLength - wallThick,
-                    length - topWidth - wallThick - distBack,
+                    length - islandTopWidth - wallThick - islandDistBack,
                     topHeight)),
             cBack.parts(),
             cFront.parts(),

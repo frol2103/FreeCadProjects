@@ -12,6 +12,7 @@ import common
 import windows
 import kitchenCabinet
 import cabinet
+import wallCabinet
 
 def hreload():
     util.clear()
@@ -23,11 +24,12 @@ def hreload():
     reload(windows)
     reload(cabinet)
     reload(kitchenCabinet)
+    reload(wallCabinet)
 
 def showAll(showWindows=True):
     hreload();
     walls.showAll();
     if(showWindows): windows.showAll();
     kitchenCabinet.showAll()
-
+    wallCabinet.showAll()
 
