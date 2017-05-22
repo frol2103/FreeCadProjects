@@ -29,13 +29,15 @@ def showAll(pnt=Base.Vector(0, 0, 0), dir=Base.Vector(0, 0, 1)):
 def allParts():
     parts = []
     util.concat(parts,workplan())
-    return util.concats([
-        util.common(houseBox(),parts),
+    return util.concat(map(lambda x : rich(x).withColor((0.98,0.98,0.98)),util.concats([
+        parts,
         fridge(),
         fridgeCabinet(),
         upCabinet(),
         hoodCabinet(),
-        ])
+        ])),
+        backPanel()
+        )
     
 def workplan():
     return util.concats([
@@ -53,7 +55,8 @@ def workplanPlates():
 
     return [rich(face \
                 .extrude(z(workplanThick))) \
-                .transO(position + z(workplanHeight)),
+                .transO(position + z(workplanHeight))\
+                .withTexture(marbreTexture),
             rich(util.trimAlong(face, face.Edges[3],20) \
                     .extrude(z(workplanHeight)))\
                     .transO(position)
@@ -69,7 +72,8 @@ def workplanRightPart():
     c=cabinet.Cabinet(square(x(wpWidth),z(workplanHeight)).transO(position))
     return util.concats([
                 box(wpWidth,workplanDepth,workplanThick)\
-                                .transO(position + z(workplanHeight)),
+                                .transO(position + z(workplanHeight)) \
+                                .withTexture(marbreTexture),
                 c.parts(),
                 extrudeFace(
                     map(lambda f: util.trimFace(f,3),
@@ -83,7 +87,7 @@ def extrudeFace(faces, dirFactor=1):
 def island():
 
     topLength=2000
-    topHeight=890
+    topHeight=islandTopHeight
     backCabinetDepth=560
     backCabinetLength=1600
     frontCabinetDepth=300
@@ -112,7 +116,9 @@ def island():
             box(topLength, islandTopWidth, workplanThick)\
                 .transO(v(width-topLength - wallThick,
                     length - islandTopWidth - wallThick - islandDistBack,
-                    topHeight)),
+                    topHeight)) \
+                .withTexture(marbreTexture),
+                
             cBack.parts(),
             cFront.parts(),
             cBackFace,
@@ -151,8 +157,6 @@ def fridgeCabinet():
         ])
 
 
-def splitIn(length, howMany):
-    return map(lambda i : i*(length/howMany),range(1,howMany))
 
 hoodHeight=1700
 
@@ -185,3 +189,19 @@ def hoodCabinet():
             .transO(xy(600,length-wallThick-platesCabinetWidth))\
             .extrude(z(1000)))\
             .common(houseBox())
+
+def backPanel():
+
+    height=hoodHeight-workplanHeight
+    return util.concats([
+            rich(square(x(width-600-workplanWindowLength-150), z(height)).extrude(y(boardThick))) \
+                    .transO(xz(600,workplanHeight)) \
+                    .transO(y(length-wallThick-boardThick)) \
+                    .withColor((1.00,0.00,0.00)),
+            rich(square(y(platesCabinetWidth), z(height)).extrude(x(boardThick))) \
+                    .transO(xz(600,workplanHeight)) \
+                    .transO(y(length-wallThick-platesCabinetWidth)) \
+                    .withColor((1.00,0.00,0.00)),
+
+
+        ])

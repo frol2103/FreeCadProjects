@@ -22,9 +22,11 @@ def showAll(pnt=Base.Vector(0, 0, 0), dir=Base.Vector(0, 0, 1)):
 def allParts():
     parts = []
     util.concat(parts,mainWalls())
-    util.concat(parts,stairs())
-    return util.flatten([
+    return util.concats([
         util.common(houseBox(),parts),
+        stairs() \
+                .common(houseBox()) \
+                .withTexture('/home/francois/Downloads/wall-1733680_1920.jpg')
         ])
     
 def mainWalls():

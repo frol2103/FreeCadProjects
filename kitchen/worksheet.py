@@ -2,6 +2,9 @@ import util
 from util import *
 import Part
 import kitchenCabinet
+import wallCabinet
+import RichTopoShape
+import kitchenTable
 
 def test():
     util.clear()
@@ -34,3 +37,25 @@ def upCabinet():
     reload(kitchenCabinet)
     reload(util)
     util.addGroup("upcabinet", kitchenCabinet.upCabinet())
+
+
+
+def wallcabinet():
+    reload(wallCabinet)
+    reload(util)
+    util.clear()
+    wallCabinet.showAll()
+
+
+def texture():
+    reload(util)
+    reload(RichTopoShape)
+    clear()
+    p = rich(square(x(1500),y(1200))).withTexture("a")
+
+    util.addGroup("textured",[p])
+    
+def showTable():
+    reload(kitchenTable)
+    reload(util)
+    p = kitchenTable.showAll()

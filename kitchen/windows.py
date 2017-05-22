@@ -9,7 +9,7 @@ import window
 import common
 from common import *
 
-windowHeight=1000
+windowHeight=1100
 
 def showAll(pnt=Base.Vector(0, 0, 0), dir=Base.Vector(0, 0, 1)):
     util.addGroup("Windows",allParts())
@@ -67,7 +67,7 @@ def windowDoor():
 
 
 def workplanWindow():
-    windowLength=1200
+    windowLength=workplanWindowLength
     return [
             window.Window(square(x(windowLength),z(windowHeight))
                     .transO(v(width-windowLength-150,

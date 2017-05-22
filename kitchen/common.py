@@ -20,6 +20,13 @@ workplanWindowLength=1200
 
 islandDistBack=1680
 islandTopWidth=990
+islandTopHeight=890
+wallCabinetDepth=300
+
+boardThick=18
+
+woodTexture='/home/francois/.FreeCAD/Mod/MyScripts/kitche/oak.jpg'
+marbreTexture='/home/francois/.FreeCAD/Mod/MyScripts/kitche/marbre.jpg'
 
 def houseBox():
     w = faceFromVectors([O,x(10000),xy(10000,10000),y(10000)])

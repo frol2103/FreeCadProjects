@@ -13,6 +13,7 @@ import windows
 import kitchenCabinet
 import cabinet
 import wallCabinet
+import kitchenTable
 
 def hreload():
     util.clear()
@@ -25,6 +26,7 @@ def hreload():
     reload(cabinet)
     reload(kitchenCabinet)
     reload(wallCabinet)
+    reload(kitchenTable)
 
 def showAll(showWindows=True):
     hreload();
@@ -32,4 +34,5 @@ def showAll(showWindows=True):
     if(showWindows): windows.showAll();
     kitchenCabinet.showAll()
     wallCabinet.showAll()
+    kitchenTable.showAll()
 

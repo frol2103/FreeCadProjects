@@ -1,6 +1,8 @@
 from util import *
 import FreeCAD
 from FreeCAD import Base
+from PySide import QtGui
+from pivy import coin
 
 O=Base.Vector(0,0,0)
 
@@ -8,6 +10,8 @@ class RichTopoShape:
     color=(0.8,0.8,0.8)
     name="Part"
     transparency=0
+    texturePath=None
+
 
     def __str__(self):
         return "RichTopoShape " + self.name + " " + str(self.color) + " of (" + str(self.delegate) + ")"
@@ -51,6 +55,9 @@ class RichTopoShape:
     def commonFace(self, p):
         return rich(self.common(p).delegate.Faces[0])
 
+    def withTexture(self, texturePath):
+        self.texturePath=texturePath
+        return self
 
     def withColor(self,c):
         self.color=c
@@ -70,8 +77,19 @@ class RichTopoShape:
             o.Shape = self.delegate
             o.ViewObject.ShapeColor=self.color
             o.ViewObject.Transparency=self.transparency
+            self.setTexture(o)
             grp.addObject(o)
-        
+    
+
+
+
+    def setTexture(self,obj):
+        if(self.texturePath):
+            # get a jpg filename
+            rootnode = obj.ViewObject.RootNode
+            tex =  coin.SoTexture2()
+            tex.filename = str(self.texturePath)
+            rootnode.insertChild(tex,1) 
 
 def shapeFromRich(p):
         if(hasattr(p, 'delegate')):

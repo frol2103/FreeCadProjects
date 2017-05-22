@@ -23,6 +23,7 @@ def show(parts):
         Part.show(parts)
 
 def addGroup(name,parts):
+    print("addgroup")
     doc = FreeCAD.activeDocument()
     grp = doc.addObject("App::DocumentObjectGroup", name)
 
@@ -208,3 +209,10 @@ def splitFaceAlong(face,direction ,splitDist):
 
 def dir(edge):
     return (edge.Vertexes[1].Point - edge.Vertexes[0].Point).normalize()
+
+
+def splitIn(length, howMany):
+    return map(lambda i : i*(length/howMany),range(1,howMany))
+
+
+
